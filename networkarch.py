@@ -73,7 +73,9 @@ def bias_variable(shape, var_name, distribution=''):
 
 def encoder(widths, dist_weights, dist_biases, scale, num_shifts_max, first_guess):
     """Create an encoder network: an input placeholder x, dictionary of weights, and dictionary of biases.
-
+    (encoder_widths, dist_weights=params['dist_weights'][0:depth + 1],
+                                 dist_biases=params['dist_biases'][0:depth + 1], scale=params['scale'],
+                                 num_shifts_max=max_shifts_to_stack, first_guess=params['first_guess'])
     Arguments:
         widths -- array or list of widths for layers of network
         dist_weights -- array or list of strings for distributions of weight matrices
@@ -90,6 +92,7 @@ def encoder(widths, dist_weights, dist_biases, scale, num_shifts_max, first_gues
     Side effects:
         None
     """
+    # widths denotes the sturcture of encoder, [2, 80, 80, 2], the nueral number of the encoder
     x = tf.placeholder(tf.float64, [num_shifts_max + 1, None, widths[0]])
 
     weights = dict()
@@ -278,7 +281,7 @@ def form_complex_conjugate_block(omegas, delta_t):
     return tf.stack([row1, row2], axis=2)  # [None, 2, 2] put one row below other
 
 
-def varying_multiply(y, omegas, delta_t, num_real, num_complex_pairs):
+def varying_multiply(y,  omegas, delta_t, num_real, num_complex_pairs):
     """Multiply y-coordinates on the left by matrix L, but let matrix vary.
 
     Arguments:
@@ -470,11 +473,12 @@ def create_koopman_net(phase, keep_prob, params):
 
     Raises ValueError if len(y) is not len(params['shifts']) + 1
     """
+    # params['d']=8
     depth = int((params['d'] - 4) / 2)
 
     max_shifts_to_stack = helperfns.num_shifts_in_stack(params)
 
-    encoder_widths = params['widths'][0:depth + 2]  # n ... k
+    encoder_widths = params['widths'][0:depth + 2]  # 2, w, w, k
     x, weights, biases = encoder(encoder_widths, dist_weights=params['dist_weights'][0:depth + 1],
                                  dist_biases=params['dist_biases'][0:depth + 1], scale=params['scale'],
                                  num_shifts_max=max_shifts_to_stack, first_guess=params['first_guess'])

@@ -394,8 +394,8 @@ def set_defaults(params):
     if 'shifts_middle' not in params:
         print("setting default: penalty on all middle shifts from 1 to num_shifts_middle")
         params['shifts_middle'] = np.arange(params['num_shifts_middle']) + 1
-    params['num_shifts'] = len(params['shifts'])  # must be calculated like this
-    params['num_shifts_middle'] = len(params['shifts_middle'])  # must be calculated like this
+    params['num_shifts'] = len(params['shifts'])  # must be calculated like this    it equels 30
+    params['num_shifts_middle'] = len(params['shifts_middle'])  # must be calculated like this   it equels 50
 
     if 'recon_lam' not in params:
         print("setting default: weight on reconstruction is 1.0")

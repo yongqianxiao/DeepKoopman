@@ -70,7 +70,7 @@ def define_loss(x, y, g_list, weights, biases, params, phase, keep_prob):
         next_step = net.varying_multiply(g_list[0], omegas, params['delta_t'], params['num_real'],
                                          params['num_complex_pairs'])
         # multiply g_list[0] by L (j+1) times
-        for j in np.arange(max(params['shifts_middle'])):
+        for j in np.arange(max(params['shifts_middle'])):  # 50 步
             if (j + 1) in params['shifts_middle']:
                 if params['relative_loss']:
                     loss3_denominator = tf.reduce_mean(
@@ -213,7 +213,7 @@ def try_net(data_val, params):
 
         ind = np.arange(num_examples)
         np.random.shuffle(ind)
-        data_train_tensor = data_train_tensor[:, ind, :]
+        data_train_tensor = data_train_tensor[:, ind, :]    # 打乱训练数据
 
         # loop over batches in this file
         for step in range(params['num_steps_per_batch'] * num_batches):
