@@ -141,6 +141,7 @@ def encoder_apply(x, weights, biases, act_type, batch_flag, phase, shifts_middle
             x_shift = x[shift]
         else:
             x_shift = tf.squeeze(x[shift, :, :])
+        # 对第一次shift的一个batch的数据都经过一下编码网络，即得到第j步时所有的状态的观测值\psi(x_j)
         y.append(
             encoder_apply_one_shift(x_shift, weights, biases, act_type, batch_flag, phase, keep_prob, name,
                                     num_encoder_weights))
